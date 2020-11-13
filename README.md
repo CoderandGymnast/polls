@@ -43,3 +43,6 @@ the database migrations shipped with the app.
 python manage.py migrate
 ```
 
+## IV. Tricks:
+* Double **Shift** to search everywhere.
+

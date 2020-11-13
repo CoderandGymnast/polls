@@ -1,14 +1,27 @@
+import datetime
+
 from django.db import models
+from django.utils import timezone  # Configure in "website/settings.py".
 
 # Django follows the DRY Principle: https://docs.djangoproject.com/en/3.1/misc/design-philosophies/#dry
 class Question(models.Model):  # Python Inheritance.
 	question_text = models.CharField(max_length=200)
 	published_date = models.DateTimeField("Published date")  # "Published date" is human-readable name.
 
+	def __str__(self):  # Override the "__str__" method of the Model class.
+		return self.question_text
+
+	def was_published_recently(self):
+		return self.published_date >= timezone.now() - datetime.timedelta(days=1)
+
+
 class Choice(models.Model):
 	question = models.ForeignKey(Question, on_delete=models.CASCADE)  # "models.CASCADE": When the referenced object is deleted, also delete the objects that have references to it.
 	choice_text = models.CharField(max_length=200)  # "CharField" requires "max_length" argument.
 	votes = models.IntegerField(default=0)
+
+	def __str__(self):
+		return self.choice_text
 
 
 """
@@ -38,4 +51,26 @@ class Choice(models.Model):
 """
 [SHOULD WE ADD MIGRATIONS DIRECTORY TO THE VERSION CONTROL SYSTEM]:
 * YES. The reason that there are separate commands to make and apply migrations is because you’ll commit migrations to your version control system and ship them with your app; they not only make your development easier, they’re also usable by other developers and in production.
+"""
+
+"""
+[SELF KEYWORD IN PYTHON]:
+* The "self" keyword is used to represent in instance of the class. 
+"""
+
+"""
+[DATETIME AND TIMEZONE]:
+"timezone.now() - datetime.timedelta(days=1)": The current time minus 1 day.
+"""
+
+"""
+[PYTHON INTERACTIVE SHELL]:
+"python manage.py shell": We're using this instead of simply typing "python",
+becaues "manage.py" sets the DJANGO_SETTINGS_MODULE environment variable,
+which gives Django the Python import path to the "website/settings".
+"""
+
+"""
+[DJANGO API]:
+* "Question.objects.filter(question_text__startswith="...")": "startswith" is a method of string datatype.
 """
