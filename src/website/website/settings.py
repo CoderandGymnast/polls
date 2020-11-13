@@ -14,6 +14,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print(f"BASE_DIR '{BASE_DIR}'")  # The absolute path of the directory created by the command "django-admin startproject ..."
 
 
 # Quick-start development settings - unsuitable for production
@@ -30,7 +31,8 @@ ALLOWED_HOSTS = ["192.168.1.101", ]  # Reference: https://docs.djangoproject.com
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS = [  # Holds the names of all Django applications that are activated in this Django instance.
+    "polls.apps.PollsConfig",  # Could include the application name directly. However, should use Python dotted path instead.
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -73,7 +75,7 @@ WSGI_APPLICATION = 'website.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
+DATABASES = {  # By default, the configuration uses SQLite.
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
@@ -105,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'UTC'  # Universal Time Coordinated (UTC) is the primary time standard by which the World regulates clocks and time.
 
 USE_I18N = True
 
