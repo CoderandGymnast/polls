@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+	<h1>{{ question.question_text }}</h1>
+
+	{% if error_message %}<p><strong> {{ error_message }} </strong></p>
+	{% endif %}
+
+	<form action="{% url 'polls:vote' question.id %}" method="post">  <!-- "url 'detail' question.id": 'detail' and 'question.id' are arguments of the funtion 'url''' -->
+		{% csrf_token %} <!-- Cross Site Request Forgeries. -->
+		{% for choice in question.choice_set.all %}
+			<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">  <!-- Django built-in variable: 1-indexed. -->
+			<label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+		{% endfor %}
+		<input id="button-submit" type="submit" value="Vote">
+	</form>
+<!--	<ul>-->
+<!--		{% for choice in question.choice_set.all %} &lt;!&ndash; "dot-lookup syntax" to access attributes. &ndash;&gt;-->
+<!--		&lt;!&ndash; "question.choice_set.all()" in the Python environment. &ndash;&gt;-->
+<!--			<li>{{ choice.choice_text }}</li>-->
+<!--		{% endfor %}-->
+<!--	</ul>-->
+
+	<script>
+		/* Double submit preventation: */
+		let submitCounter = 0
+		$("#button-submit").click(e => {
+			submitCounter === 1 ? e.preventDefault() : submitCounter++
+		})
+	</script>
+</body>
+</html>
+
+<!--
+[NOTES]:
+* SQLite ID generator is the 1-based index.
+* The name of each radio button is "choice". That means, when somebody selects one of the radio buttons and submits the form, it’ll send the POST data choice=# where # is the ID of the selected choice.
+-->

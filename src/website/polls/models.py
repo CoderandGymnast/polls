@@ -6,14 +6,20 @@ from django.utils import timezone  # Configure in "website/settings.py".
 # Django follows the DRY Principle: https://docs.djangoproject.com/en/3.1/misc/design-philosophies/#dry
 class Question(models.Model):  # Python Inheritance.
 	question_text = models.CharField(max_length=200)
-	published_date = models.DateTimeField("Published date")  # "Published date" is human-readable name.
+	published_date = models.DateTimeField(verbose_name="Published date")  # "Published date" is human-readable name.
+	testing_field = models.IntegerField(verbose_name="Just some number", null=True)
 
 	def __str__(self):  # Override the "__str__" method of the Model class.
 		return self.question_text
 
 	def was_published_recently(self):
-		return self.published_date >= timezone.now() - datetime.timedelta(days=1)
+		now = timezone.now()
+		# return self.published_date >= timezone.now() - datetime.timedelta(days=1)
+		return now - datetime.timedelta(days=1) <= self.published_date <= now
 
+	was_published_recently.admin_order_field = "published_date"  # "list_display": https://docs.djangoproject.com/en/3.1/ref/contrib/admin/#django.contrib.admin.ModelAdmin.list_display; Enable sorting because Django does all sorting at the DB level.
+	was_published_recently.boolean = True
+	was_published_recently.short_description = "Publishded recently?"
 
 class Choice(models.Model):
 	question = models.ForeignKey(Question, on_delete=models.CASCADE)  # "models.CASCADE": When the referenced object is deleted, also delete the objects that have references to it.

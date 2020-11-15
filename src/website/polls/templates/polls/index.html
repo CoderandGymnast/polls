@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	{% load static %}  <!-- Generates the absolute URL of static files. -->
+	<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+    <title>Homepage</title>
+</head>
+<body>
+
+	{% if latest_question_list %}
+		<ul>
+			{% for question in latest_question_list %}
+<!--				<li><a href="/polls/{{ question.id }}/">{{question.question_text}}</a></li> &lt;!&ndash; "Partially hardcoded" = "Tightly-coupled" &ndash;&gt;-->
+				<!--
+				* "/polls/" = https://domain-name.com/polls/
+				* "polls/" = https://domain-name.com/polls/polls/
+				* Could use "{{ question.id }}/" or "{{ question.id }}
+				-->
+			<li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li> <!-- polls.urls: "path("<int:question_id>/", views.detail, name="detail")," -->
+			{% endfor %}
+		</ul>
+	{% else %}
+		<p>No polls are available.</p>
+	{% endif %}
+
+</body>
+</html>
+
+

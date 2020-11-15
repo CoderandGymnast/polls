@@ -1,0 +1,12 @@
+li a {
+	color: green;
+}
+
+body {
+	background: white url("images/background.gif") /* no-repeat */;  /* "images/background.gif": A relative path. */
+}
+
+/*
+ [NOTES]:
+ * Convert ".webp" to ".gif": https://ezgif.com/webp-to-gif/ezgif-7-7b6c7d4fa3a3.webp.
+ */

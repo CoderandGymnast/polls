@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 
+from django.contrib.admin import AdminSite
+
+AdminSite.site_header = "SOLOEN DASHBOARD"  # Attributes: https://docs.djangoproject.com/en/3.1/ref/contrib/admin/#django.contrib.admin.AdminSite.site_header
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 print(f"BASE_DIR '{BASE_DIR}'")  # The absolute path of the directory created by the command "django-admin startproject ..."
@@ -26,7 +30,7 @@ SECRET_KEY = '=6v9-n8ui*x@ut_q0jl)=)(@-9juq*(pukj9e7_w4(ae=kux-%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.1.101", ]  # Reference: https://docs.djangoproject.com/en/3.1/ref/settings/
+ALLOWED_HOSTS = ['*', ]  # Reference: https://docs.djangoproject.com/en/3.1/ref/settings/
 
 
 # Application definition
@@ -34,11 +38,11 @@ ALLOWED_HOSTS = ["192.168.1.101", ]  # Reference: https://docs.djangoproject.com
 INSTALLED_APPS = [  # Holds the names of all Django applications that are activated in this Django instance.
     "polls.apps.PollsConfig",  # Could include the application name directly. However, should use Python dotted path instead.
     'django.contrib.admin',
-    'django.contrib.auth',
+    'django.contrib.auth',  # The authentication framework shipped by Django, e.g., the "Groups and Users" at Django administration site.
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',  # it collects static files from each of your applications (and any other places you specify) into a single location that can easily be served in production.
 ]
 
 MIDDLEWARE = [
@@ -51,12 +55,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'website.urls'
+# Django’s STATICFILES_FINDERS setting contains a list of finders that know how to discover static files from various sources. One of the defaults is AppDirectoriesFinder which looks for a “static” subdirectory in each of the INSTALLED_APPS, like the one in polls we just created. The admin site uses the same directory structure for its static files.
+
+ROOT_URLCONF = 'website.urls'  # Django load the "website.urls" Python module when somebody requests a page from this website.
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',  # By convention DjangoTemmplates (Module, backend) looks for a "templates" subdirectory in each of the INSTALLER_APPS.
+        'DIRS': [BASE_DIR / "templates"],  # Project's templates settings.
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,6 +74,8 @@ TEMPLATES = [
         },
     },
 ]
+
+# Astute readers will ask: But if DIRS was empty by default, how was Django finding the default admin templates? The answer is that, since APP_DIRS is set to True, Django automatically looks for a templates/ subdirectory within each application package, for use as a fallback (don’t forget that django.contrib.admin is an application).
 
 WSGI_APPLICATION = 'website.wsgi.application'
 
@@ -119,4 +127,4 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static/'  # Could change the STATIC_URL to anything.
